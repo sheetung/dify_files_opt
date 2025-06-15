@@ -4,27 +4,91 @@ metadata:
   # author 和 name 唯一确定一个插件
   author: sheetung  # 插件作者，修改为你的名称
   name: difyFileOpt  # 插件名称，修改为你的插件名称
-  repository: 'https://github.com/langbot-app/HelloPlugin'  # 插件仓库地址，修改为你的插件 GitHub 仓库地址
+  repository: 'https://github.com/sheetung/dify_files_opt'  # 插件仓库地址，修改为你的插件 GitHub 仓库地址
   version: 0.1.0  # 插件版本，修改为你的插件版本
   description:  # 插件简介，修改为你的插件简介，支持多语言
-    en_US: Plugin for sending hello
-    zh_CN: 示例插件
+    en_US: Please read chinese
+    zh_CN: 通过插件访问DIFY,对消息格式化处理后同步到obsidian软件
   label:  # 插件显示名称，支持多语言。在 WebUI 上会显示对应语言的 label
-    en_US: Hello
-    zh_CN: Hello
+    en_US: difyFileOpt
+    zh_CN: difyFileOpt
 spec:
   # 插件配置（可选），可配置多项
   config:
-    - name: github_token  # 配置项名称
+    - name: dify_api_key  # 配置项名称
       label:  # 配置项显示名称，支持多语言
-        en_US: Github Token
-        zh_CN: Github Token
+        en_US: Dify API Key
+        zh_CN: Dify API 密钥
       description:  # 配置项描述，支持多语言
-        en_US: Image downloading requires a Github token
-        zh_CN: 如果不填的话，图片可能会下载失败
-      type: string  # 配置项类型，支持 string, integer, float, boolean 等
-      default: ''  # 配置项默认值
-      required: false  # 配置项是否必填
+        en_US: API key for Dify AI platform
+        zh_CN: 访问Dify平台的API密钥，用于调用对话接口
+      type: string  # 字符串类型
+      default: "app-"  # 默认值（可替换为示例值）
+      required: true  # 必填项
+    - name: dify_base_url  # 配置项名称
+      label:  # 显示名称
+        en_US: Dify Base URL
+        zh_CN: Dify 基础URL
+      description:  # 描述
+        en_US: Base API endpoint for Dify
+        zh_CN: Dify API的基础地址，格式如http://your-server/v1
+      type: string  # 字符串类型
+      default: "http://192.168.31.131/v1"  # 默认值（可替换为示例地址）
+      required: true  # 必填项
+    - name: sftp_host  # 配置项名称
+      label:  # 显示名称
+        en_US: SFTP Host
+        zh_CN: SFTP 服务器地址
+      description:  # 描述
+        en_US: Hostname or IP of the SFTP server
+        zh_CN: SFTP服务器的IP地址或域名，如192.168.1.100
+      type: string  # 字符串类型
+      default: "192.168.31.223"  # 默认值
+      required: true  # 必填项
+
+    - name: sftp_port  # 配置项名称
+      label:  # 显示名称
+        en_US: SFTP Port
+        zh_CN: SFTP 端口
+      description:  # 描述
+        en_US: Port number of the SFTP server (default: 22)
+        zh_CN: SFTP服务器的端口号，默认22（如非标准端口需填写）
+      type: integer  # 整数类型
+      default: 22  # 默认值
+      required: true  # 必填项
+
+    - name: sftp_username  # 配置项名称
+      label:  # 显示名称
+        en_US: SFTP Username
+        zh_CN: SFTP 用户名
+      description:  # 描述
+        en_US: Username for SFTP authentication
+        zh_CN: 登录SFTP服务器的用户名
+      type: string  # 字符串类型
+      default: ""  # 默认值
+      required: true  # 必填项
+
+    - name: sftp_password  # 配置项名称
+      label:  # 显示名称
+        en_US: SFTP Password
+        zh_CN: SFTP 密码
+      description:  # 描述
+        en_US: Password for SFTP authentication (leave empty for key-based auth)
+        zh_CN: 登录SFTP服务器的密码（如使用密钥认证可留空）
+      type: string  # 字符串类型
+      default: ""  # 默认值（建议替换为示例值）
+      required: false  # 非必填（若支持密钥认证）
+
+    - name: sftp_remote_file  # 配置项名称
+      label:  # 显示名称
+        en_US: Remote File Path
+        zh_CN: 远程文件路径
+      description:  # 描述
+        en_US: Path to the remote file for appending content
+        zh_CN: 用于追加内容的远程文件路径，需包含完整路径
+      type: string  # 字符串类型
+      default: ""  # 默认值
+      required: true  # 必填项
 execution:
   python:
     path: main.py  # 插件主程序路径，必须与上方插件入口代码的文件名相同
